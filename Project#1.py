@@ -30,6 +30,7 @@ direction_z = 0.5
 distance = 0
 
 yaw = 45
+token = 1
 pitch = 45
 zoom = 0.0
 chk = 1
@@ -199,7 +200,7 @@ def prepare_vao_grid():
     return VAO
 
 def cursor_callback_orbit(window, xpos, ypos):
-    global lastX, lastY, yaw, pitch, direction_x, direction_y, direction_z, world_up, distance
+    global lastX, lastY, yaw, pitch, direction_x, direction_y, direction_z, world_up, distance, token
 
     # store offset
     xoffset = xpos - lastX
@@ -215,14 +216,15 @@ def cursor_callback_orbit(window, xpos, ypos):
     yoffset = yoffset * sensitivity
 
     # control azimuth and elevation
-    yaw = yaw + xoffset
     pitch = pitch + yoffset
 
     # exception handling
     if np.cos(np.radians(pitch)) > 0:
         world_up = glm.vec3(0,1,0)
+        yaw = yaw + xoffset
     else:
         world_up = glm.vec3(0,-1,0)
+        yaw = yaw - xoffset
 
     # calculate camera pos
     direction_x = distance * np.cos(np.radians(pitch)) * np.cos(np.radians(yaw))
